@@ -7,8 +7,15 @@ from app.schemas.request import ChatRequest
 
 from app.services.rag_service import run_rag
 from app.services.ingestion_service import ingest_folder
+from app.utils.vectorstore import init_collection  # ✅ ADD
 
 app = FastAPI()
+
+# ✅ THIS IS THE FIX
+@app.on_event("startup")
+def startup_event():
+    init_collection()
+
 
 @app.post("/chat")
 def chat(req: ChatRequest):
